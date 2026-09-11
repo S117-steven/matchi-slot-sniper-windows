@@ -1,0 +1,17 @@
+{
+  "name": "matchi-slot-sniper-windows",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Windows-friendly MATCHi slot watcher with a guided desktop UI",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "wizard": "node src/cli.mjs wizard",
+    "check": "node src/cli.mjs check --config config.json",
+    "run": "node src/cli.mjs run --config config.json"
+  }
+}

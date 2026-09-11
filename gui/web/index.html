@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATCHi 场地抢订控制台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand-mark">M</div>
+      <div class="brand-group">
+        <h1>MATCHi 场地抢订</h1>
+        <p>提前登录 · 放票轮询 · Value Card 安全支付</p>
+      </div>
+      <div class="security-badge"><span></span>密码仅存内存</div>
+    </header>
+
+    <main class="app-layout">
+      <section>
+        <div class="section-header"><h2>账号</h2><span>不会写入配置或日志</span></div>
+        <div class="settings-card account-grid">
+          <label class="field-block">
+            <span class="field-label">MATCHi 邮箱</span>
+            <input id="email" class="input-field full" type="email" autocomplete="username" placeholder="name@example.com">
+          </label>
+          <label class="field-block password-field">
+            <span class="field-label">密码</span>
+            <span class="password-wrap">
+              <input id="password" class="input-field full" type="password" autocomplete="current-password" placeholder="仅本次运行使用">
+              <button id="toggle-password" class="icon-btn" type="button" title="显示或隐藏密码">显示</button>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header"><h2>预订目标</h2><span>无需指定具体场号</span></div>
+        <div class="settings-card form-grid">
+          <label class="field-block span-2">
+            <span class="field-label">场馆与运动</span>
+            <select id="facility" class="input-field full">
+              <option value="atl">ATL Victoriastadion · Badminton</option>
+            </select>
+          </label>
+          <label class="field-block">
+            <span class="field-label">目标日期</span>
+            <input id="target-date" class="input-field full" type="date">
+          </label>
+          <label class="field-block">
+            <span class="field-label">开始小时（整点）</span>
+            <select id="start-time" class="input-field full">
+              <option value="00:00">00:00</option>
+              <option value="01:00">01:00</option>
+              <option value="02:00">02:00</option>
+              <option value="03:00">03:00</option>
+              <option value="04:00">04:00</option>
+              <option value="05:00">05:00</option>
+              <option value="06:00">06:00</option>
+              <option value="07:00" selected>07:00</option>
+              <option value="08:00">08:00</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+              <option value="21:00">21:00</option>
+              <option value="22:00">22:00</option>
+              <option value="23:00">23:00</option>
+            </select>
+          </label>
+          <label class="field-block">
+            <span class="field-label">时长</span>
+            <select id="duration" class="input-field full">
+              <option value="60">60 分钟</option>
+              <option value="120">120 分钟</option>
+              <option value="180">180 分钟</option>
+            </select>
+          </label>
+          <label class="field-block">
+            <span class="field-label">场地数量</span>
+            <span class="stepper">
+              <button id="qty-minus" type="button">−</button>
+              <input id="quantity" type="number" min="1" max="6" value="1">
+              <button id="qty-plus" type="button">＋</button>
+            </span>
+          </label>
+          <div class="setting-row span-2 compact-row">
+            <div>
+              <div class="setting-title">优先连续场号</div>
+              <div class="setting-help">例如需要 3 块时优先 B5 + B6 + B7</div>
+            </div>
+            <span class="always-on">始终开启</span>
+          </div>
+          <label class="setting-row span-2 compact-row clickable">
+            <div>
+              <div class="setting-title">没有连号时接受分散场地</div>
+              <div class="setting-help">关闭后，如果找不到足够连号场地就放弃本次预订</div>
+            </div>
+            <span class="toggle-switch">
+              <input id="allow-scattered" type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header"><h2>执行与付款</h2><span>真实付款必须通过全部保护</span></div>
+        <div class="settings-card">
+          <div class="setting-row">
+            <div class="setting-title">执行模式</div>
+            <div class="mode-group">
+              <label><input type="radio" name="run-mode" value="value-card"><span>自动预订</span></label>
+              <label><input type="radio" name="run-mode" value="confirm" checked><span>确认预览</span></label>
+              <label><input type="radio" name="run-mode" value="dry-run"><span>只检测</span></label>
+            </div>
+          </div>
+          <div id="payment-settings">
+            <div class="value-card-row">
+              <div class="value-card-icon">V</div>
+              <div class="value-card-copy">
+                <div id="value-card-summary" class="setting-title">尚未读取 Value Card</div>
+                <div id="value-card-help" class="setting-help">输入邮箱和密码后读取实时余额；自动预订还需要配置结账客户端密钥</div>
+              </div>
+              <button id="btn-load-cards" class="btn btn-secondary btn-compact" type="button">读取余额</button>
+            </div>
+            <div class="form-grid embedded-grid">
+              <label class="field-block span-2">
+                <span class="field-label">支付卡片</span>
+                <select id="value-card-select" class="input-field full" disabled>
+                  <option value="">请先读取账号 Value Card</option>
+                </select>
+              </label>
+              <label class="field-block">
+                <span class="field-label">整次最大扣款（含超订）</span>
+                <span class="suffix-wrap"><input id="max-charge" class="input-field full" type="number" min="1" step="1" value="70"><b>SEK</b></span>
+              </label>
+              <label class="field-block">
+                <span class="field-label">至少距离开场</span>
+                <span class="suffix-wrap"><input id="minimum-lead" class="input-field full" type="number" min="1" max="720" value="168"><b>小时</b></span>
+              </label>
+            </div>
+            <label class="setting-row">
+              <div>
+                <div class="setting-title">数量优先，允许不确定订单后继续补位</div>
+                <div class="setting-help">可能超过目标场地数；脚本仍受下方超订数量和最大扣款双重限制</div>
+              </div>
+              <span class="toggle-switch">
+                <input id="allow-overbooking" type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </span>
+            </label>
+            <div id="overbooking-settings" class="form-grid embedded-grid">
+              <label class="field-block">
+                <span class="field-label">最多允许超订</span>
+                <span class="suffix-wrap"><input id="max-overbook" class="input-field full" type="number" min="0" max="6" step="1" value="2"><b>块</b></span>
+              </label>
+              <div class="field-block">
+                <span class="field-label">最坏情况下场地数</span>
+                <div id="maximum-courts-preview" class="input-field full">目标数量 + 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="release-card">
+          <div class="release-icon">◷</div>
+          <div>
+            <div class="release-label">预计放票时间</div>
+            <div id="release-time" class="release-time">请选择日期</div>
+          </div>
+          <div id="countdown" class="countdown">—</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header"><h2>任务状态</h2><span id="run-caption">尚未启动</span></div>
+        <div class="status-grid">
+          <div class="status-card">
+            <div class="card-label">阶段</div>
+            <div id="state-phase" class="card-state state-idle">待命</div>
+            <div id="detail-phase" class="card-detail">填写设置后启动</div>
+          </div>
+          <div class="status-card">
+            <div class="card-label">场地</div>
+            <div id="state-courts" class="card-state state-idle">—</div>
+            <div id="detail-courts" class="card-detail">优先连续编号</div>
+          </div>
+          <div class="status-card">
+            <div class="card-label">结果</div>
+            <div id="state-result" class="card-state state-idle">—</div>
+            <div id="detail-result" class="card-detail">尚无结果</div>
+          </div>
+        </div>
+        <div id="progress-container" class="progress-container hidden">
+          <div class="progress-bar-wrapper"><div id="progress-bar" class="progress-bar"></div></div>
+          <span id="progress-text">准备中…</span>
+        </div>
+      </section>
+
+      <section class="section-actions">
+        <button id="btn-start" class="btn btn-primary">启动抢订任务</button>
+        <button id="btn-stop" class="btn btn-danger" disabled>停止任务</button>
+        <button id="btn-logs" class="btn btn-secondary">打开日志文件夹</button>
+      </section>
+
+      <section id="result-panel" class="result-panel hidden">
+        <div class="result-heading"><span id="result-icon">✓</span><div><h2 id="result-title">任务完成</h2><p id="result-subtitle"></p></div></div>
+        <div id="result-details" class="result-details"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="section-header"><h2>运行日志</h2><button id="btn-clear-log" class="text-btn">清空界面</button></div>
+      <div class="log-wrapper"><pre id="log-console">[系统] 控制台加载中…</pre></div>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
